@@ -13,6 +13,8 @@ class AddProduct extends ProductEvent {
 
 class GetProducts extends ProductEvent {}
 
+class GetProductsFavorites extends ProductEvent {}
+
 class GetProductByID extends ProductEvent {
   final String id;
   GetProductByID(this.id);

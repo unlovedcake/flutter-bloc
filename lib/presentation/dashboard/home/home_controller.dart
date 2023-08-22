@@ -6,4 +6,10 @@ extension on _HomeState {
       GetProducts(),
     );
   }
+
+  void _getDocumentIdFavorites() {
+    BlocProvider.of<ProductBloc>(context).add(
+      GetProductsFavorites(),
+    );
+  }
 }

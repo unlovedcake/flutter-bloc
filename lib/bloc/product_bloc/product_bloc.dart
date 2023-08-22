@@ -20,5 +20,16 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(ProductsError(e.toString()));
       }
     });
+
+    on<GetProductsFavorites>((event, emit) async {
+      emit(ProductsLoading());
+      try {
+        final docIdFavorites =
+            await ProductRepository.fetchFavoriteDocumentIds();
+        emit(ProductsFavoriteLoaded(documentIdFavorites: docIdFavorites));
+      } catch (e) {
+        emit(ProductsError(e.toString()));
+      }
+    });
   }
 }

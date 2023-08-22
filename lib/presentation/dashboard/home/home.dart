@@ -17,25 +17,25 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<String> favoriteDocumentIds = [];
-  Future<void> fetchFavoriteDocumentIds() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(firebaseAuth.currentUser!.uid)
-          .collection('favourites')
-          .where('is_heart', isEqualTo: true)
-          .get();
+  // Future<void> fetchFavoriteDocumentIds() async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(firebaseAuth.currentUser!.uid)
+  //         .collection('favourites')
+  //         .where('is_heart', isEqualTo: true)
+  //         .get();
 
-      setState(() {
-        favoriteDocumentIds = querySnapshot.docs.map((doc) => doc.id).toList();
-      });
+  //     setState(() {
+  //       favoriteDocumentIds = querySnapshot.docs.map((doc) => doc.id).toList();
+  //     });
 
-      print(favoriteDocumentIds);
-      print('favoriteDocumentIds');
-    } catch (e) {
-      print("Error fetching favorite document IDs: $e");
-    }
-  }
+  //     print(favoriteDocumentIds);
+  //     print('favoriteDocumentIds');
+  //   } catch (e) {
+  //     print("Error fetching favorite document IDs: $e");
+  //   }
+  // }
 
   Future<void> updateIsHeartField(String documentId) async {
     try {
@@ -97,7 +97,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _getAllProducts();
-    fetchFavoriteDocumentIds();
+    _getDocumentIdFavorites();
+    //fetchFavoriteDocumentIds();
     getAllFavourites();
     super.initState();
   }
@@ -108,230 +109,241 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: const Text('Home'),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius:
-                      BorderRadius.circular(10.0), // Adjust the value as needed
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(36.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(
-                            10.0), // Adjust the value as needed
-                      ),
-                      child: Image.asset(
-                        'asset/images/google.png', // Replace with your image asset path
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Wrap(
-                      direction: Axis.vertical,
-                      spacing: 10,
-                      children: [
-                        const Text(
-                          'Widget Title',
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        const Text(
-                          '200.00',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        OutlinedButton(
-                            onPressed: () {
-                              RouterPageAnimation.routePageAnimation(context,
-                                  RouterPageAnimation.goToAddProduct());
-                            },
-                            child: const Text('Buy Now'))
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Row(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Adjust the value as needed
+                  ),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Categories',
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold)),
-                      TextButton(onPressed: () {}, child: Text('View All'))
+                      Container(
+                        padding: const EdgeInsets.all(36.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Adjust the value as needed
+                        ),
+                        child: Image.asset(
+                          'asset/images/google.png', // Replace with your image asset path
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+                      Wrap(
+                        direction: Axis.vertical,
+                        spacing: 10,
+                        children: [
+                          const Text(
+                            'Widget Title',
+                            style: TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold),
+                          ),
+                          const Text(
+                            '200.00',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          OutlinedButton(
+                              onPressed: () {
+                                RouterPageAnimation.routePageAnimation(context,
+                                    RouterPageAnimation.goToAddProduct());
+                              },
+                              child: const Text('Buy Now'))
+                        ],
+                      ),
                     ],
                   ),
-                  const DefaultTabController(
-                      length: 5,
-                      child: TabBar(
-                        isScrollable: true,
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              'Shoe',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                          Tab(
-                            child: Text('Gadgets',
-                                style: TextStyle(color: Colors.black)),
-                          ),
-                          Tab(
-                            child: Text('Tshirt',
-                                style: TextStyle(color: Colors.black)),
-                          ),
-                          Tab(
-                            child: Text('Electronics',
-                                style: TextStyle(color: Colors.black)),
-                          ),
-                          Tab(
-                            child: Text('Phone',
-                                style: TextStyle(color: Colors.black)),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Popular Products',
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold)),
-                  TextButton(onPressed: () {}, child: Text('View All'))
-                ],
-              ),
-              BlocConsumer<ProductBloc, ProductState>(
-                builder: (context, state) {
-                  if (state is ProductsLoading) {
-                    return Text('Loading');
-                  } else if (state is ProductsLoaded) {
-                    final products = state.products;
-
-                    return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        // mainAxisSpacing: 10.0,
-                        // crossAxisSpacing: 10.0,
-                      ),
-                      itemCount: products!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final product = products[index];
-                        return Column(
-                          children: [
-                            Expanded(
-                              child: Card(
-                                elevation: 4.0,
-                                child: Stack(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          Image.network(
-                                            product.imageUrl,
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                            height: 140,
-                                          ),
-                                          Text(product.name),
-                                          Text(product.price)
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                        top: 8.0,
-                                        left: 2.0,
-                                        child: Text('Discount 10%')),
-                                    Positioned(
-                                      top: 4.0,
-                                      right: 0.0,
-                                      child: IconButton(
-                                        icon: favoriteDocumentIds
-                                                .contains(product.id)
-                                            ? Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.red,
-                                              )
-                                            : Icon(Icons.favorite_border),
-                                        onPressed: () {
-                                          if (favoriteDocumentIds
-                                              .contains(product.id)) {
-                                            updateIsHeartField(product.id);
-                                            setState(() {
-                                              _getAllProducts();
-                                              fetchFavoriteDocumentIds();
-                                            });
-                                          } else {
-                                            final userRef = fireStore
-                                                .collection('users')
-                                                .doc(firebaseAuth
-                                                    .currentUser!.uid)
-                                                .collection('favourites')
-                                                .doc(product.id);
-
-                                            userRef.set({
-                                              'is_heart': true,
-                                              'product_id': product
-                                                  .id // This associates the user ID with the favourite
-                                            }..addEntries({
-                                                'product_reference':
-                                                    'products/${product.id}'
-                                              }.entries));
-
-                                            setState(() {
-                                              _getAllProducts();
-                                              fetchFavoriteDocumentIds();
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                ),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Categories',
+                            style: TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold)),
+                        TextButton(onPressed: () {}, child: Text('View All'))
+                      ],
+                    ),
+                    const DefaultTabController(
+                        length: 5,
+                        child: TabBar(
+                          isScrollable: true,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                'Shoe',
+                                style: TextStyle(color: Colors.black),
                               ),
                             ),
+                            Tab(
+                              child: Text('Gadgets',
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                            Tab(
+                              child: Text('Tshirt',
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                            Tab(
+                              child: Text('Electronics',
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                            Tab(
+                              child: Text('Phone',
+                                  style: TextStyle(color: Colors.black)),
+                            ),
                           ],
-                        );
-                      },
-                    );
-                    // Expanded(
-                    //   child: ListView.builder(
-                    //     itemCount: products!.length,
-                    //     itemBuilder: (context, index) {
-                    //       final product = products[index];
-                    //       return ListTile(
-                    //         title: Text(product.name),
-                    //         subtitle: Text('\$${product.price}'),
-                    //       );
-                    //     },
-                    //   ),
-                    // );
-                  } else {
-                    return SizedBox();
-                  }
-                },
-                listener: (context, state) {
-                  if (state is ProductsError) {
-                    // Displaying the error message if the user is not authenticated
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(state.error)));
-                  }
-                },
-              )
-            ],
+                        )),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Popular Products',
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold)),
+                    TextButton(onPressed: () {}, child: Text('View All'))
+                  ],
+                ),
+                BlocConsumer<ProductBloc, ProductState>(
+                  builder: (context, state) {
+                    if (state is ProductsFavoriteLoaded) {
+                      favoriteDocumentIds = state.documentIdFavorites!;
+                    }
+
+                    if (state is ProductsLoading) {
+                      return Text('Loading');
+                    } else if (state is ProductsLoaded) {
+                      final products = state.products;
+
+                      int numberOfRows = (products!.length / 2).ceil();
+
+                      double totalGridViewHeight =
+                          187 * numberOfRows.toDouble();
+
+                      return Container(
+                        height: totalGridViewHeight,
+                        //height: MediaQuery.of(context).size.height / 2.3,
+                        color: Colors.grey.shade100,
+                        child: GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            // mainAxisSpacing: 10.0,
+                            // crossAxisSpacing: 10.0,
+                          ),
+                          itemCount: products.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final product = products[index];
+                            return Card(
+                              elevation: 4.0,
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      Image.network(
+                                        product.imageUrl,
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: 140,
+                                      ),
+                                      Text(product.name),
+                                      Text(product.price)
+                                    ],
+                                  ),
+                                  Positioned(
+                                      top: 8.0,
+                                      left: 2.0,
+                                      child: Text('Discount 10%')),
+                                  Positioned(
+                                    top: 4.0,
+                                    right: 0.0,
+                                    child: IconButton(
+                                      icon: favoriteDocumentIds
+                                              .contains(product.id)
+                                          ? Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.red,
+                                            )
+                                          : Icon(Icons.favorite_border),
+                                      onPressed: () {
+                                        if (favoriteDocumentIds
+                                            .contains(product.id)) {
+                                          updateIsHeartField(product.id);
+
+                                          _getAllProducts();
+                                          _getDocumentIdFavorites();
+                                          // fetchFavoriteDocumentIds();
+                                        } else {
+                                          final userRef = fireStore
+                                              .collection('users')
+                                              .doc(
+                                                  firebaseAuth.currentUser!.uid)
+                                              .collection('favourites')
+                                              .doc(product.id);
+
+                                          userRef.set({
+                                            'is_heart': true,
+                                            'product_id': product
+                                                .id // This associates the user ID with the favourite
+                                          }..addEntries({
+                                              'product_reference':
+                                                  'products/${product.id}'
+                                            }.entries));
+
+                                          _getAllProducts();
+                                          _getDocumentIdFavorites();
+                                          //fetchFavoriteDocumentIds();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                      // Expanded(
+                      //   child: ListView.builder(
+                      //     itemCount: products!.length,
+                      //     itemBuilder: (context, index) {
+                      //       final product = products[index];
+                      //       return ListTile(
+                      //         title: Text(product.name),
+                      //         subtitle: Text('\$${product.price}'),
+                      //       );
+                      //     },
+                      //   ),
+                      // );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                  listener: (context, state) {
+                    if (state is ProductsError) {
+                      // Displaying the error message if the user is not authenticated
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(state.error)));
+                    }
+                  },
+                ),
+                Container(
+                    height: 300, color: Colors.blue, child: Text('Fotter'))
+              ],
+            ),
           ),
         ));
   }

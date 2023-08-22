@@ -16,12 +16,22 @@ class ProductsLoading extends ProductState {
 }
 
 class ProductsLoaded extends ProductState {
-  List<Product>? products;
+  final List<Product>? products;
 
   ProductsLoaded({this.products}) : assert(products != null);
 
   @override
   List<Object> get props => [products!];
+}
+
+class ProductsFavoriteLoaded extends ProductState {
+  final List<String>? documentIdFavorites;
+
+  ProductsFavoriteLoaded({this.documentIdFavorites})
+      : assert(documentIdFavorites != null);
+
+  @override
+  List<Object> get props => [documentIdFavorites!];
 }
 
 // If any error occurs the state is changed to AuthError.

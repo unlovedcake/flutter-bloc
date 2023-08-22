@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterbloccrud/constant/firebase_instances.dart';
 import 'package:flutterbloccrud/model/product_model.dart';
 
@@ -27,8 +28,23 @@ class ProductRepository {
       return Product.fromMap(map);
     }).toList();
 
-    print(products);
-    print('products');
     return products;
+  }
+
+  static Future<List<String>> fetchFavoriteDocumentIds() async {
+    List<String> favoriteDocumentIds = [];
+    try {
+      QuerySnapshot querySnapshot = await fireStore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .collection('favourites')
+          .where('is_heart', isEqualTo: true)
+          .get();
+
+      return favoriteDocumentIds =
+          querySnapshot.docs.map((doc) => doc.id).toList();
+    } catch (e) {
+      rethrow;
+    }
   }
 }
