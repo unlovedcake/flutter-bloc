@@ -6,7 +6,7 @@ import 'app.dart';
 import 'bloc/auth_bloc.dart';
 import 'bloc/product_bloc/product_bloc.dart';
 import 'enums/flavor_enum.dart';
-import 'firebase_options.dart';
+import 'secrets/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
